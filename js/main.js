@@ -1,3 +1,67 @@
+// ── Password protection ──
+// To change the password, update PASS_HASH. Generate a new one in the browser console:
+// crypto.subtle.digest('SHA-256', new TextEncoder().encode('your-password'))
+//   .then(h => console.log(Array.from(new Uint8Array(h)).map(b => b.toString(16).padStart(2,'0')).join('')))
+(function () {
+  const PASS_HASH = 'e8554aad755656a0498020352c91130b8b028ecf7039ff30081c6790980db90e';
+  const AUTH_KEY = 'portfolio_auth';
+
+  if (sessionStorage.getItem(AUTH_KEY) === 'true') return;
+
+  document.documentElement.classList.add('site-locked');
+
+  async function verify(input) {
+    const data = new TextEncoder().encode(input);
+    const buf = await crypto.subtle.digest('SHA-256', data);
+    return Array.from(new Uint8Array(buf))
+      .map(b => b.toString(16).padStart(2, '0'))
+      .join('') === PASS_HASH;
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const overlay = document.createElement('div');
+    overlay.className = 'password-overlay';
+    overlay.innerHTML =
+      '<div class="password-modal">' +
+        '<div class="password-lock-icon">' +
+          '<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">' +
+            '<rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>' +
+            '<path d="M7 11V7a5 5 0 0 1 10 0v4"/>' +
+          '</svg>' +
+        '</div>' +
+        '<h2>Password Required</h2>' +
+        '<p>Enter the password to view this portfolio.</p>' +
+        '<form class="password-form">' +
+          '<input type="password" class="password-input" placeholder="Enter password" autocomplete="off" autofocus />' +
+          '<button type="submit" class="password-btn">Unlock</button>' +
+        '</form>' +
+        '<div class="password-error" hidden>Incorrect password. Please try again.</div>' +
+      '</div>';
+    document.body.appendChild(overlay);
+
+    const form = overlay.querySelector('.password-form');
+    const input = overlay.querySelector('.password-input');
+    const error = overlay.querySelector('.password-error');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (await verify(input.value)) {
+        sessionStorage.setItem(AUTH_KEY, 'true');
+        overlay.classList.add('password-overlay--unlocked');
+        document.documentElement.classList.remove('site-locked');
+        setTimeout(() => overlay.remove(), 400);
+      } else {
+        error.hidden = false;
+        input.value = '';
+        input.focus();
+        error.classList.remove('shake');
+        void error.offsetWidth;
+        error.classList.add('shake');
+      }
+    });
+  });
+})();
+
 document.addEventListener('DOMContentLoaded', () => {
 
 

@@ -1539,3 +1539,121 @@ footer a:hover {
     gap: 1rem;
   }
 }
+
+/* ── Password protection overlay ── */
+
+html.site-locked .page,
+html.site-locked > body > nav {
+  visibility: hidden;
+}
+
+.password-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg);
+  transition: opacity 0.35s ease, visibility 0.35s ease;
+}
+
+.password-overlay--unlocked {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.password-modal {
+  text-align: center;
+  max-width: 380px;
+  width: 90%;
+  padding: 3rem 2rem;
+}
+
+.password-lock-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: var(--primary-glow);
+  color: var(--primary);
+  margin-bottom: 1.5rem;
+}
+
+.password-modal h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  color: var(--text);
+}
+
+.password-modal p {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  margin-bottom: 2rem;
+}
+
+.password-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.password-input {
+  font-family: inherit;
+  font-size: 1rem;
+  padding: 0.8rem 1rem;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--bg-card);
+  color: var(--text);
+  outline: none;
+  transition: border-color var(--transition-fast);
+}
+
+.password-input:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px var(--primary-glow);
+}
+
+.password-btn {
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 600;
+  padding: 0.8rem 1.5rem;
+  border: none;
+  border-radius: var(--radius);
+  background: var(--primary);
+  color: #fff;
+  cursor: pointer;
+  transition: background var(--transition-fast), transform var(--transition-fast);
+}
+
+.password-btn:hover {
+  background: var(--primary-dark);
+  transform: translateY(-1px);
+}
+
+.password-btn:active {
+  transform: translateY(0);
+}
+
+.password-error {
+  margin-top: 1rem;
+  font-size: 0.875rem;
+  color: #d94452;
+}
+
+.password-error.shake {
+  animation: shake 0.4s ease;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-6px); }
+  40% { transform: translateX(6px); }
+  60% { transform: translateX(-4px); }
+  80% { transform: translateX(4px); }
+}
