@@ -3,7 +3,7 @@
 // crypto.subtle.digest('SHA-256', new TextEncoder().encode('your-password'))
 //   .then(h => console.log(Array.from(new Uint8Array(h)).map(b => b.toString(16).padStart(2,'0')).join('')))
 (function () {
-  const PASS_HASH = 'e8554aad755656a0498020352c91130b8b028ecf7039ff30081c6790980db90e';
+  const PASS_HASH = '40ed42c52462218c3cefc8c16c49c367c14052960d332b62119f088a1916503a';
   const AUTH_KEY = 'portfolio_auth';
 
   if (sessionStorage.getItem(AUTH_KEY) === 'true') return;
